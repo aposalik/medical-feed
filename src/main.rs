@@ -24,7 +24,8 @@ async fn main() {
         .route("/", get(index_handler))
         .route("/search", get(search_handler));
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await.unwrap();
     println!("Server running at http://localhost:3000");
     axum::serve(listener, app).await.unwrap();
 }
